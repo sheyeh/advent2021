@@ -8,7 +8,7 @@ def count(list, window):
     return c
 
 my_list = []
-with open('../../data/day1.txt', 'r') as f:
+with open('day1.txt', 'r') as f:
     for line in f:
         my_list.append(int(line))
 
