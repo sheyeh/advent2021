@@ -15,4 +15,22 @@ with open('day2.txt', 'r') as f:
         pos[0] += dir[0]
         pos[1] += dir[1]
 
-print(pos[0] * pos[1])
+print("Part 1:", pos[0] * pos[1])
+
+aim = 0
+horizontal = 0
+depth = 0
+
+with open('day2.txt', 'r') as f:
+    for line in f:
+        direction, value = line.split(" ")
+        val = int(value)
+        if direction == 'up':
+            aim -= val
+        if direction == 'down':
+            aim += val
+        if direction == 'forward':
+            horizontal += val
+            depth += aim * val
+
+print("Part 2:", horizontal * depth)
