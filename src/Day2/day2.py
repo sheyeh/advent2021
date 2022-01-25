@@ -7,15 +7,16 @@ def parse(line):
         'forward': [val, 0]
     }[direction]
 
-pos = [0, 0]
+horizontal = 0
+depth = 0
 
 with open('day2.txt', 'r') as f:
     for line in f:
-        dir = parse(line)
-        pos[0] += dir[0]
-        pos[1] += dir[1]
+        x, y = parse(line)
+        horizontal += x
+        depth += y
 
-print("Part 1:", pos[0] * pos[1])
+print("Part 1:", horizontal * depth)
 
 aim = 0
 horizontal = 0
