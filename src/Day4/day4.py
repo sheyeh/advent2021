@@ -14,13 +14,15 @@ with open('day4.txt', 'r') as f:
     # handle last line
     boards.append(BingoBoard(numbers))
 
-done = False
+part_1 = 0
 for draw in draws:
     for board in boards:
-        board.mark(draw)
-        if board.winner:
-            print("Part 1:", board.sum * int(draw))
-            done = True
-            break
-    if done:
-        break
+        if not board.winner:
+            board.mark(draw)
+            if board.winner:
+                part_2 = board.sum * int(draw)  # keep score of last winning board
+                if not part_1:  # first winning board
+                    part_1 = part_2
+
+print("Part 1:", part_1)
+print("Part 2:", part_2)
