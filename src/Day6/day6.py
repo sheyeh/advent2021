@@ -1,6 +1,5 @@
 import numpy
 
-fish = []
 with open('day6.txt', 'r') as f:
     for line in f:
         fish = [int(i) for i in line.split(",")]
