@@ -1,4 +1,5 @@
 import re
+import bisect
 
 regex = re.compile(r'\[\]|\{\}|\<\>|\(\)')
 corrupted = re.compile(r'\]|\}|\>|\)')
@@ -35,7 +36,7 @@ with open('day10.txt', 'r') as f:
         syntax_error_score, autocomplete_score = score(line.rstrip())
         total_syntax_error_score += syntax_error_score
         if autocomplete_score:
-            autocomplete_scores.append(autocomplete_score)
+            bisect.insort(autocomplete_scores, autocomplete_score)
 
 print("Part 1:", total_syntax_error_score)
-print("Part 2:", sorted(autocomplete_scores)[int(len(autocomplete_scores) / 2)])
+print("Part 2:", autocomplete_scores[int(len(autocomplete_scores) / 2)])
