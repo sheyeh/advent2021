@@ -47,3 +47,11 @@ for i in range(0, 100):
     total_flashes += flash()
 
 print("Part 1:", total_flashes)
+
+f = 0
+while f < N * N:
+    increment()
+    f = flash()
+    i += 1
+
+print("Part 2:", i + 1)
