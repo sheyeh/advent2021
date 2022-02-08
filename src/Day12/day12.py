@@ -1,11 +1,6 @@
-graph = {}
+from Graph import Graph
 
-
-def add(x, y):
-    if graph.get(x):
-        graph[x].append(y)
-    else:
-        graph[x] = [y]
+graph = Graph()
 
 
 def count(source='start', visited=None):
@@ -14,7 +9,7 @@ def count(source='start', visited=None):
     if visited is None:
         visited = []
     num_paths = 0
-    neighbors = set(graph[source]) - set(visited)
+    neighbors = set(graph.get(source)) - set(visited)
     for nxt in neighbors:
         next_visited = visited.copy()
         if source.islower():
@@ -28,7 +23,6 @@ with open('day12.txt', 'r') as f:
         ends = edge.rstrip().split("-")
         fromNode = ends[0]
         toNode = ends[1]
-        add(fromNode, toNode)
-        add(toNode, fromNode)
+        graph.add(fromNode, toNode)
 
 print("Part 1:", count())
