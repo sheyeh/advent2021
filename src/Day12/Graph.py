@@ -15,5 +15,16 @@ class Graph:
         self._add(x, y)
         self._add(y, x)
 
-    def get(self, node):
-        return self._graph[node]
+    def count(self, source='start', visited=None):
+        if source == 'end':
+            return 1
+        if visited is None:
+            visited = []
+        num_paths = 0
+        neighbors = set(self._graph.get(source)) - set(visited)
+        for nxt in neighbors:
+            next_visited = visited.copy()
+            if source.islower():
+                next_visited.append(source)
+            num_paths += self.count(nxt, next_visited)
+        return num_paths
