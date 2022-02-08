@@ -19,7 +19,7 @@ def risk(x, y):
         else 0
 
 
-print("Part 1:", sum([risk(i, j) for i in range(0, map_N) for j in range(0, map_M)]))
+print("Part 1:", sum([risk(i, j) for i in range(map_N) for j in range(map_M)]))
 
 
 def area(x, y):
@@ -31,8 +31,8 @@ def area(x, y):
 
 
 basin_areas = []
-for i in range(0, map_N):
-    for j in range(0, map_M):
+for i in range(map_N):
+    for j in range(map_M):
         basin_area = area(i, j)
         if basin_area > 0:
             basin_areas.append(basin_area)

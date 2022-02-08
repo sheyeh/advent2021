@@ -12,7 +12,7 @@ with open('day3.txt', 'r') as f:
         num_rows += 1
         digits = parse(line)
         if hist:  # hist already populated, so not the first line
-            for i in range(0, len(digits) - 1):
+            for i in range(len(digits) - 1):
                 hist[i] += digits[i]
         else:  # first line
             hist = digits

@@ -7,8 +7,8 @@ N: int = len(levels)
 
 
 def increment():
-    for i in range(0, N):
-        for j in range(0, N):
+    for i in range(N):
+        for j in range(N):
             levels[i][j] += 1
 
 
@@ -20,8 +20,8 @@ def flash():
     still_flashing = True
     while still_flashing:
         still_flashing = False
-        for i in range(0, N):
-            for j in range(0, N):
+        for i in range(N):
+            for j in range(N):
                 if levels[i][j] > 9:
                     still_flashing = True
                     levels[i][j] = -1000
@@ -32,8 +32,8 @@ def flash():
                             levels[_i][_j] += 1
 
     num_flashes = 0
-    for i in range(0, N):
-        for j in range(0, N):
+    for i in range(N):
+        for j in range(N):
             if levels[i][j] < 0:
                 levels[i][j] = 0
                 num_flashes += 1
@@ -42,7 +42,7 @@ def flash():
 
 
 total_flashes = 0
-for i in range(0, 100):
+for i in range(100):
     increment()
     total_flashes += flash()
 

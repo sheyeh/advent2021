@@ -5,8 +5,8 @@ with open('day6.txt', 'r') as f:
         fish = [int(i) for i in line.split(",")]
 
 
-hist = list(numpy.histogram(fish, range(0, 10))[0])
-for i in range(0, 256):
+hist = list(numpy.histogram(fish, range(10))[0])
+for i in range(256):
     h8 = hist[0]  # fish with zero days left
     hist = hist[1:]
     hist[6] += h8  # fish with zero days reset to 6, and get added to others that have 6 days left

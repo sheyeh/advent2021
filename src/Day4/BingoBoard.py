@@ -11,7 +11,7 @@ class BingoBoard:
         self.row_hits = [0] * self.N
         self.col_hits = [0] * self.N
         self.pos = {}
-        for i in range(0, len(numbers)):
+        for i in range(len(numbers)):
             num = numbers[i]
             self.pos[num] = (i % n, int(i / n))
         self.winner = False
