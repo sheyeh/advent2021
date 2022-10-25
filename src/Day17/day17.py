@@ -25,13 +25,16 @@ def trajectory(x_speed, y_speed, x_0, x_1, y_0, y_1):
     return path if inside else None
 
 
-x_min_speed = int(numpy.sqrt((1 + 4 * 96)) / 2 + 1)
+x_min_speed = int(numpy.sqrt((1 + 4 * x_left)) / 2 + 1)
 peak = 0
+count = 0
 for x_sp in range(x_min_speed, x_right + 1):
-    for y_sp in range(-y_bottom + 1):
+    for y_sp in range(y_bottom - 1, -y_bottom + 1):
         tr = trajectory(x_sp, y_sp, x_left, x_right, y_bottom, y_top)
         if tr:
             y_max = max([s[1] for s in tr])
             peak = max(y_max, peak)
+            count += 1
 
 print(peak)
+print(count)
