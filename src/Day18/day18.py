@@ -72,7 +72,7 @@ class Node:
         for nv in flat:
             value = nv.get()
             if value >= 10:
-                split_node = splited(value)
+                split_node = splitted(value)
                 split_node.parent = nv.node
                 nv.set(split_node)
                 return True
@@ -84,7 +84,7 @@ class Node:
         return 3 * mag_left + 2 * mag_right
 
 
-def splited(v):
+def splitted(v):
     return Node(math.floor(v/2), math.ceil(v/2))
 
 
@@ -141,6 +141,13 @@ with open('day18.txt', 'r') as f:
     for line in f:
         nodes.append(parse(line.rstrip()))
 
+sum_node = None
 for node in nodes:
-    print(node)
-    print(node.magnitude())
+    sum_node = Node(sum_node, node) if sum_node else node
+    cont = True
+    while cont:
+        cont = sum_node.explode()
+        if cont:
+            continue
+        cont = sum_node.split()
+print(sum_node.magnitude())
