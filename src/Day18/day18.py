@@ -17,22 +17,35 @@ class Node:
         else:
             return "({},{})".format(str(self.left), str(self.right))
 
-
     def find_explode(self, depth=0):
         # it is assumed that 4 is the max depth, otherwise it returns a node of nodes
         if depth == 4:
             return self
         if isnode(self.left):
-            return self.left.find_explode(depth + 1)
-        elif isnode(self.right):
-            return self.right.find_explode(depth + 1)
+            n = self.left.find_explode(depth + 1)
+            if n:
+                return n
+        if isnode(self.right):
+            n = self.right.find_explode(depth + 1)
+            if n:
+                return n
         return None
-
 
     def explode(self):
         explode_node = self.find_explode()
-        print("Explode", explode_node)
-
+        flat = self.flatten2()
+        for exp_index in range(len(flat)):
+            if flat[exp_index].node == explode_node:
+                break
+        if exp_index > 0:  # set value to the left
+            flat[exp_index - 1].set(flat[exp_index - 1].get() + flat[exp_index].get())
+        if exp_index < len(flat) - 2:  # set value to the right
+            flat[exp_index + 2].set(flat[exp_index + 2].get() + flat[exp_index + 1].get())
+        parent = flat[exp_index].node.parent
+        if parent.left == explode_node:
+            parent.left = 0
+        else:
+            parent.right = 0
 
     def flatten(self):
         left = self.left
@@ -40,7 +53,6 @@ class Node:
         left_series = left.flatten() if isnode(left) else [left]
         right_series = right.flatten() if isnode(right) else [right]
         return left_series + right_series
-
 
     def flatten2(self):
         left = self.left
@@ -55,22 +67,31 @@ class NodeValue:
         self.node = node
         self.value = value  # True means left and false means right
 
-
     def __str__(self):
-        return str(self.node.left if self.value else self.node.right)
+        return str(self.get())
+
+    def get(self):
+        return self.node.left if self.value else self.node.right
+
+    def set(self, set_value):
+        if self.value:
+            self.node.left = set_value
+        else:
+            self.node.right = set_value
 
 
 def isnode(n):
     return isinstance(n, Node)
 
 
-def parse(node_str):
+def parse_str(node_str):
     # This is cheating :-)
-    return eval(node_str.replace("[","Node(").replace("]",")"))
+
+    return eval(node_str.replace("[", "Node(").replace("]", ")"))
 
 
-def parse2(node_str):
-    if re.match("\d", node_str):
+def parse(node_str):
+    if re.match("[0-9]", node_str):
         return int(node_str)
     left_br = 0  # count number of left brackets
     right_br = 0  # count number of right brackets
@@ -86,19 +107,16 @@ def parse2(node_str):
                 if left_br - right_br == 1:
                     break
     left = node_str[1:i]
-    right = node_str[i+1:len(node_str)-1]
-    return Node(parse2(left), parse2(right))
+    right = node_str[i + 1:len(node_str) - 1]
+    return Node(parse(left), parse(right))
 
 
 nodes = []
 with open('day18.txt', 'r') as f:
     for line in f:
-        nodes.append(parse2(line.rstrip()))
+        nodes.append(parse(line.rstrip()))
 
 for node in nodes:
     print(node)
-    print("E", node.find_explode())
-    print("F",node.flatten())
-    print("F2",[int(str(nv)) for nv in node.flatten2()])
-    # node.explode()
-
+    node.explode()
+    print("Exploded:", node)
