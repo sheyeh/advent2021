@@ -1,3 +1,4 @@
+import math
 import re
 
 
@@ -33,21 +34,26 @@ class Node:
 
     def explode(self):
         explode_node = self.find_explode()
-        flat = self.flatten2()
-        for exp_index in range(len(flat)):
-            if flat[exp_index].node == explode_node:
-                break
-        if exp_index > 0:  # set value to the left
-            flat[exp_index - 1].set(flat[exp_index - 1].get() + flat[exp_index].get())
-        if exp_index < len(flat) - 2:  # set value to the right
-            flat[exp_index + 2].set(flat[exp_index + 2].get() + flat[exp_index + 1].get())
-        parent = flat[exp_index].node.parent
-        if parent.left == explode_node:
-            parent.left = 0
+        if explode_node:
+            flat = self.flatten2()
+            for exp_index in range(len(flat)):
+                if flat[exp_index].node == explode_node:
+                    break
+            if exp_index > 0:  # set value to the left
+                flat[exp_index - 1].set(flat[exp_index - 1].get() + flat[exp_index].get())
+            if exp_index < len(flat) - 2:  # set value to the right
+                flat[exp_index + 2].set(flat[exp_index + 2].get() + flat[exp_index + 1].get())
+            parent = explode_node.parent
+            if parent.left == explode_node:
+                parent.left = 0
+            else:
+                parent.right = 0
+            return True
         else:
-            parent.right = 0
+            return False
 
     def flatten(self):
+        # Values of the tree left to right (not used)
         left = self.left
         right = self.right
         left_series = left.flatten() if isnode(left) else [left]
@@ -60,6 +66,26 @@ class Node:
         left_series = left.flatten2() if isnode(left) else [NodeValue(self, True)]
         right_series = right.flatten2() if isnode(right) else [NodeValue(self, False)]
         return left_series + right_series
+
+    def split(self):
+        flat = self.flatten2()
+        for nv in flat:
+            value = nv.get()
+            if value >= 10:
+                split_node = splited(value)
+                split_node.parent = nv.node
+                nv.set(split_node)
+                return True
+        return False
+
+    def magnitude(self):
+        mag_left = self.left.magnitude() if isnode(self.left) else self.left
+        mag_right = self.right.magnitude() if isnode(self.right) else self.right
+        return 3 * mag_left + 2 * mag_right
+
+
+def splited(v):
+    return Node(math.floor(v/2), math.ceil(v/2))
 
 
 class NodeValue:
@@ -86,7 +112,6 @@ def isnode(n):
 
 def parse_str(node_str):
     # This is cheating :-)
-
     return eval(node_str.replace("[", "Node(").replace("]", ")"))
 
 
@@ -118,5 +143,4 @@ with open('day18.txt', 'r') as f:
 
 for node in nodes:
     print(node)
-    node.explode()
-    print("Exploded:", node)
+    print(node.magnitude())
