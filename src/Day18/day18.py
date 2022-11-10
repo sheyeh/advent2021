@@ -18,6 +18,13 @@ class Node:
         else:
             return "({},{})".format(str(self.left), str(self.right))
 
+    def deep_copy(self):
+        left = self.left
+        right = self.right
+        left_copy = left.deep_copy() if isnode(left) else left
+        right_copy = right.deep_copy() if isnode(right) else right
+        return Node(left_copy, right_copy)
+
     def find_explode(self, depth=0):
         # it is assumed that 4 is the max depth, otherwise it returns a node of nodes
         if depth == 4:
@@ -35,7 +42,7 @@ class Node:
     def explode(self):
         explode_node = self.find_explode()
         if explode_node:
-            flat = self.flatten2()
+            flat: list[NodeValue] = self.flatten2()
             for exp_index in range(len(flat)):
                 if flat[exp_index].node == explode_node:
                     break
@@ -50,10 +57,10 @@ class Node:
                 parent.right = 0
             return True
         else:
-            return False
+            return False  # no exploding needed
 
     def flatten(self):
-        # Values of the tree left to right (not used)
+        # Values of the tree left to right (this method is not used)
         left = self.left
         right = self.right
         left_series = left.flatten() if isnode(left) else [left]
@@ -78,6 +85,14 @@ class Node:
                 return True
         return False
 
+    def reduce(self):
+        cont = True
+        while cont:
+            cont = self.explode()
+            if cont:
+                continue
+            cont = self.split()
+
     def magnitude(self):
         mag_left = self.left.magnitude() if isnode(self.left) else self.left
         mag_right = self.right.magnitude() if isnode(self.right) else self.right
@@ -89,6 +104,7 @@ def splitted(v):
 
 
 class NodeValue:
+    # A helper class thgat points to a value (left or right) in a node
     def __init__(self, node: Node, value: bool):
         self.node = node
         self.value = value  # True means left and false means right
@@ -143,11 +159,20 @@ with open('day18.txt', 'r') as f:
 
 sum_node = None
 for node in nodes:
-    sum_node = Node(sum_node, node) if sum_node else node
-    cont = True
-    while cont:
-        cont = sum_node.explode()
-        if cont:
+    node_copy = node.deep_copy()
+    sum_node = Node(sum_node, node_copy) if sum_node else node_copy
+    sum_node.reduce()
+
+print("Part 1:", sum_node.magnitude())
+
+max_mag = 0
+for node1 in nodes:
+    for node2 in nodes:
+        if node1 == node2:
             continue
-        cont = sum_node.split()
-print(sum_node.magnitude())
+        node = Node(node1.deep_copy(), node2.deep_copy())
+        node.reduce()
+        magnitude = node.magnitude()
+        max_mag = max(max_mag, magnitude)
+
+print("Part 2:", max_mag)
