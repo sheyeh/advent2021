@@ -86,12 +86,8 @@ class Node:
         return False
 
     def reduce(self):
-        cont = True
-        while cont:
-            cont = self.explode()
-            if cont:
-                continue
-            cont = self.split()
+        while self.explode() or self.split():
+            pass
 
     def magnitude(self):
         mag_left = self.left.magnitude() if isnode(self.left) else self.left
