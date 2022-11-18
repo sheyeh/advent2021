@@ -15,7 +15,6 @@ for r in range(6):
         S = S if t == 0 else Rz @ S if r % 2 else Rz @ Rz @ Rz @ S
         rotations.append(S)
 
-
 beacons = []
 scanner_num = -1
 with open('day19.txt', 'r') as f:
@@ -41,8 +40,8 @@ def diff(l1, l2):
                 d.setdefault(result_key, 0)
                 d[result_key] += 1
                 if d[result_key] == 12:
-                    return True, result, rotation
-    return None, None, None
+                    return result, rotation
+    return None, None
 
 
 matches = {}  # matches[i][j] has the transformation from scanner j to scanner i
@@ -50,8 +49,8 @@ for i1 in range(len(beacons)):
     beacons1 = beacons[i1]
     for i2 in range(i1 + 1, len(beacons)):
         beacons2 = beacons[i2]
-        found, delta, rotation = diff(beacons1, beacons2)
-        if found:
+        delta, rotation = diff(beacons1, beacons2)
+        if delta is not None:
             matches.setdefault(i1, {})
             matches.setdefault(i2, {})
             inv_rot = np.linalg.inv(rotation)
@@ -87,4 +86,14 @@ for i in range(scanner_num):
         p = m[0] @ b + m[1]
         points[str(p).replace(".", "")] = p
 
-print(len(points))
+print("Part 1:", len(points))
+
+manhattan_distance = 0
+for i in range(scanner_num):
+    for j in range(i+1, scanner_num):
+        m1 = matches[0][i][1]
+        m2 = matches[0][j][1]
+        manhattan_distance = \
+            max(manhattan_distance, sum([abs(m1[k] - m2[k]) for k in range(3)]))
+
+print("Part 2:", manhattan_distance)
