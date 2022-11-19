@@ -1,13 +1,16 @@
 image = []
+num_steps = 50
 with open('day20.txt', 'r') as f:
     image_key = f.readline().rstrip()
     f.readline()
     for line in f:
-        image.append(list("...." + line.rstrip() + "...."))
+        # Add a frame of dots around the lines to the left and right
+        image.append(list("." * (num_steps + 2) + line.rstrip() + "." * (num_steps + 2)))
 
 image_width = len(image[0])
 frame_horizontal = [list("." * image_width)]
-image = frame_horizontal * 4 + image + frame_horizontal * 4
+# Also add top and bottom frame of dots
+image = frame_horizontal * (num_steps + 2) + image + frame_horizontal * (num_steps + 2)
 
 
 def pixel(x, y):
@@ -18,7 +21,7 @@ def pixel(x, y):
     return image_key[pos]
 
 
-for step in range(2):
+for step in range(num_steps):
     processed_image = [list(line) for line in image]
     for i in range(1, image_width - 1):
         for j in range(1, image_width - 1):
@@ -33,6 +36,6 @@ for step in range(2):
     for i in range(image_width):
         image[i][0] = fill
         image[i][image_width-1] = fill
-
-count = len("".join(["".join(line) for line in image]).replace(".", ""))
-print(count)
+    if step == 1 or step == 49:
+        count = len("".join(["".join(line) for line in image]).replace(".", ""))
+        print(count)
