@@ -49,9 +49,7 @@ def split(players, turn=0, depth=0):
         if player.win(21):
             wins[turn] += dice_possibilities[rolled]
         else:
-            new_players = players
-            new_players[turn] = player
-            next_wins = split(new_players, (turn + 1) % 2, depth+1)
+            next_wins = split(players, (turn + 1) % 2, depth+1)
             wins[0] += next_wins[0] * dice_possibilities[rolled]
             wins[1] += next_wins[1] * dice_possibilities[rolled]
         player.unroll(rolled)
