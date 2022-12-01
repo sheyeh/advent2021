@@ -40,7 +40,9 @@ class Cuboid:
 
     def disjoint(self, other):
         """
-        @self does not cover any part of @other
+        Check if @self and @other are disjoint
+        :param other: another cuboid
+        :return: whether @self is disjoint from @other
         """
         return _disjoint_1d(self.x_from, self.x_to, other.x_from, other.x_to) \
             or _disjoint_1d(self.y_from, self.y_to, other.y_from, other.y_to) \

@@ -17,6 +17,14 @@ with open('day22.txt', 'r') as f:
 
 
 def count_on(the_cuboids, trimmer=None):
+    """
+    Iterate over cuboids from bottom to top and replace each cuboid with a list
+    of cuboids that don't overlap with any of the cuboids above, and cover the parts
+    of the original cuboid that don't overlap with cuboids above.
+    :param the_cuboids: the list of cuboids
+    :param trimmer: if present - the applicable region
+    :return: how many cubes are on
+    """
     free_cuboids = []
     for c1 in range(len(the_cuboids)):
         cub1 = the_cuboids[c1].trim(trimmer)
